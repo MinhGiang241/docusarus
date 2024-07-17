@@ -15,6 +15,21 @@ import R from "@docusaurus/renderRoutes";
 import routes from "@generated/routes";
 import Custom from "./Custom";
 import HomePage from "./HomePage";
+import LayoutProvider from "@theme/Layout/Provider";
+import Navbar from "@theme/Navbar";
+import Footer from "@theme/Footer";
+import DocBreadcrumbs from "@theme/DocBreadcrumbs";
+import NavbarItem from "@theme/NavbarItem";
+import NavbarLayout from "@theme/Navbar/Layout";
+import NavbarLogo from "@theme/Navbar/Logo";
+import NavbarContent from "@theme/Navbar/Content";
+import NavbarNavLink from "@theme/NavbarItem/NavbarNavLink";
+import DefaultNavbarItem from "@theme/NavbarItem/DefaultNavbarItem";
+import FooterLayout from "@theme/Footer/Layout";
+import FooterLinksSimple from "@theme/Footer/Links/Simple";
+import FooterLinks from "@theme/Footer/Links";
+import FooterCopyright from "@theme/Footer/Copyright";
+import FooterLogo from "@theme/Footer/Logo";
 
 interface CustomSideBar {
   type?: string;
@@ -25,6 +40,49 @@ interface CustomSideBar {
 
 function DynamicPage(props: any) {
   console.log("props", props);
+
+  var footerItems = [
+    {
+      title: "Docs",
+      items: [
+        {
+          label: "Tutorial",
+          to: "/docs/intro",
+        },
+      ],
+    },
+    {
+      title: "Community",
+      items: [
+        {
+          label: "Stack Overflow",
+          href: "https://stackoverflow.com/questions/tagged/docusaurus",
+        },
+        {
+          label: "Discord",
+          href: "https://discordapp.com/invite/docusaurus",
+        },
+        {
+          label: "Twitter",
+          href: "https://twitter.com/docusaurus",
+        },
+      ],
+    },
+    {
+      title: "More",
+      items: [
+        {
+          label: "Blog",
+          to: "/blog",
+        },
+        {
+          label: "GitHub",
+          href: "https://github.com/facebook/docusaurus",
+        },
+      ],
+    },
+  ];
+
   const [sideBars, setSideBars] = useState<CustomSideBar[]>([]);
   const getCustomSideBar = async () => {
     try {
@@ -45,8 +103,39 @@ function DynamicPage(props: any) {
   }, []);
 
   return (
-    <Layout title="Page Title">
-      <div style={{ display: "flex" }}>
+    <LayoutProvider>
+      <NavbarLayout>
+        <NavbarLogo />
+        <DefaultNavbarItem label="docs" to={"/docs"} />
+        <DefaultNavbarItem label="Dynamic" to={"/d"} />
+        <DefaultNavbarItem label="custom-1" to={"/d/1"} />
+        <DefaultNavbarItem label="custom-2" to={"/d/2"} />
+        <DefaultNavbarItem label="custom-3" to={"/d/3"} />
+
+        {/* <NavbarNavLink  label="Dynamic" isNavLink exact  /> */}
+
+        <NavbarItem
+          isNavLink
+          value="/d"
+          position="left"
+          title="HHH"
+          items={[
+            {
+              to: "/guides/",
+              label: "Guides",
+            },
+            {
+              to: "/api/ios",
+              label: "iOS API",
+            },
+            {
+              to: "/api/android",
+              label: "Android API",
+            },
+          ]}
+        ></NavbarItem>
+      </NavbarLayout>
+      <div style={{ display: "flex", minHeight: "900px" }}>
         <aside>
           {/* @ts-ignore */}
           <DocSidebar sidebar={sideBars}></DocSidebar>
@@ -64,7 +153,14 @@ function DynamicPage(props: any) {
           </Switch>
         </aside>
       </div>
-    </Layout>
+
+      <FooterLayout
+        style="dark"
+        logo={<div></div>}
+        links={<FooterLinks links={footerItems} />}
+        copyright={<FooterCopyright copyright="OKKKK" />}
+      />
+    </LayoutProvider>
   );
 }
 

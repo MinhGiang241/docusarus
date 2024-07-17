@@ -11,7 +11,7 @@ const getFooter = async () => {
     var response = await axios.get(
       "https://api.tutorial.tmas.net.vn/apimodel/test.get_footer",
     );
-    console.log("data", response);
+
     return response?.data?.data;
   } catch (e) {
     return {};

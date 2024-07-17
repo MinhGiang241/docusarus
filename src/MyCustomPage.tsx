@@ -39,11 +39,12 @@ function MyCustomPage(props: any) {
   var pathname = props.location?.pathname;
   var a = Array.from(Object.values(customData));
 
-  //
+  //@ts-ignore
   var htmlIndex = a?.findIndex((d) => d?.href === pathname);
 
+  //@ts-ignore
   var html = htmlIndex != -1 ? (a ?? [])[htmlIndex]?.html : "";
-  //
+
   return (
     <Layout>
       <div style={{ display: "flex" }}>

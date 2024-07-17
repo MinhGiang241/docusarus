@@ -3,9 +3,9 @@ import type { Config } from "@docusaurus/types";
 import type * as Preset from "@docusaurus/preset-classic";
 import Plugin from "./plugins/src/index";
 import axios from "axios";
-
+import path from "path";
 //export default config;
-//
+
 const getFooter = async () => {
   try {
     var response = await axios.get(
@@ -29,7 +29,35 @@ export default async () => {
     // Set the /<baseUrl>/ pathname under which your site is served
     // For GitHub pages deployment, it is often '/<projectName>/'
     baseUrl: "/",
-    plugins: [Plugin],
+    plugins: [
+      // Plugin,
+      async (context, options) => ({
+        //@ts-ignore
+        name: "ge",
+        async loadContent() {
+          return { root: "root" };
+        },
+        // lifecycle callback
+        async contentLoaded({ content, actions }) {
+          const { setGlobalData } = actions;
+          setGlobalData({
+            sidebarData: content,
+            footerLinks: [],
+          });
+
+          await actions.addRoute({
+            path: `/d`,
+            component: require.resolve("./src/DynamicPage.tsx"),
+            modules: {},
+            customData: {
+              type: "link",
+              href: "/d",
+              label: "custom",
+            },
+          });
+        },
+      }),
+    ],
 
     // GitHub pages deployment config.
     // If you aren't using GitHub pages, you don't need these.
@@ -95,8 +123,8 @@ export default async () => {
             position: "right",
           },
           {
-            href: "/c",
-            label: "custom",
+            href: "/d",
+            label: "Dynamic",
             position: "left",
           },
         ],

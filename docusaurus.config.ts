@@ -28,6 +28,7 @@ export default async () => {
       darkTheme: prismThemes[res.theme],
     },
   };
+
   // prism: {
   //        theme: prismThemes.github,
   //        darkTheme: prismThemes.dracula,

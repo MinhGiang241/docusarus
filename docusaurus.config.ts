@@ -21,12 +21,18 @@ const getConfig = async () => {
 export default async () => {
   var res = await getConfig();
   const config: Config = res.config;
-  const c = {
-    ...config,
+  var themeConfig = config.themeConfig;
+  themeConfig = {
+    ...themeConfig,
     prism: {
       theme: prismThemes[res.theme],
       darkTheme: prismThemes[res.theme],
     },
+  };
+
+  const c = {
+    ...config,
+    themeConfig,
   };
   // prism: {
   //        theme: prismThemes.github,

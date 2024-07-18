@@ -22,7 +22,7 @@ export default async () => {
   var res = await getConfig();
   const config: Config = res.config;
   var themeConfig = config.themeConfig;
-  themeConfig = {
+  var newThemeConfig = {
     ...themeConfig,
     prism: {
       theme: prismThemes[res.theme],
@@ -32,7 +32,7 @@ export default async () => {
 
   const c = {
     ...config,
-    themeConfig,
+    themeConfig: newThemeConfig,
   };
   // prism: {
   //        theme: prismThemes.github,

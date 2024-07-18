@@ -127,10 +127,7 @@ function DynamicPage(props: any) {
     <LayoutProvider>
       <NavbarLayout>
         <NavbarLogo />
-        <Logo
-          href={"https://account.tmas.net.vn/images/white-logo.png"}
-          style={{ width: 30, height: 30 }}
-        />
+
         {navBars?.map((e) => (
           <DefaultNavbarItem label={e?.label} to={e?.href} />
         ))}

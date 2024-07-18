@@ -33,5 +33,5 @@ export default async () => {
   //        darkTheme: prismThemes.dracula,
   //      },
 
-  return config;
+  return c;
 };

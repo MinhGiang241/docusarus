@@ -31,6 +31,7 @@ import FooterLinksSimple from "@theme/Footer/Links/Simple";
 import FooterLinks from "@theme/Footer/Links";
 import FooterCopyright from "@theme/Footer/Copyright";
 import FooterLogo from "@theme/Footer/Logo";
+import Logo from "@theme/Logo";
 
 interface CustomSideBar {
   type?: string;
@@ -62,7 +63,7 @@ function DynamicPage(props: any) {
   const getFooter = async () => {
     try {
       var response = await axios.get(
-        "https://api.tutorial.tmas.net.vn/apimodel/test.get_footer",
+        "https://api.tutorial.tmas.net.vn/apimodel/webcontent.getFooter",
       );
       console.log("res SideBar", response);
       setFooterItems(response?.data?.data);
@@ -126,6 +127,10 @@ function DynamicPage(props: any) {
     <LayoutProvider>
       <NavbarLayout>
         <NavbarLogo />
+        <Logo
+          href={"https://account.tmas.net.vn/images/white-logo.png"}
+          style={{ width: 30, height: 30 }}
+        />
         {navBars?.map((e) => (
           <DefaultNavbarItem label={e?.label} to={e?.href} />
         ))}

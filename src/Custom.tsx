@@ -1,5 +1,9 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import MDXComponents from "@theme/MDXComponents";
+import { MDXProvider } from "@mdx-js/react";
+import MDXContent from "@theme/MDXContent";
+import ReactMarkdown from "react-markdown";
 
 function Custom(props: any) {
   console.log("po", props);
@@ -26,7 +30,8 @@ function Custom(props: any) {
 
   return (
     <div>
-      <div dangerouslySetInnerHTML={{ __html: html ?? "" }}></div>
+      <ReactMarkdown>{html}</ReactMarkdown>
+      {/* <div dangerouslySetInnerHTML={{ __html: html ?? "" }}></div> */}
     </div>
   );
 }

@@ -11,7 +11,9 @@ function Custom(props: any) {
         "https://api.tutorial.tmas.net.vn/apimodel/webcontent.getContent",
         { href: props.data?.href },
       );
-      if (res?.code != 0) {
+      console.log("res", res);
+
+      if (res?.data.code != 0) {
         return;
       }
       setHtml(res?.data?.data);
@@ -24,9 +26,6 @@ function Custom(props: any) {
 
   return (
     <div>
-      <h1>Custom</h1>
-      <h4 style={{ color: "red" }}>{props.data.label}</h4>
-      <p>{props.data.href}</p>
       <div dangerouslySetInnerHTML={{ __html: html ?? "" }}></div>
     </div>
   );

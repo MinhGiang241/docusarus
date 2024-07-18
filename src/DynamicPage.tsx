@@ -157,7 +157,7 @@ function DynamicPage(props: any) {
           {/* @ts-ignore */}
           <DocSidebar sidebar={sideBars}></DocSidebar>
         </aside>
-        <aside>
+        <div>
           <Switch>
             <Route path={`/d`} render={() => <HomePage />} exact />
             {links?.map((g) => (
@@ -168,7 +168,7 @@ function DynamicPage(props: any) {
               />
             ))}
           </Switch>
-        </aside>
+        </div>
       </div>
 
       {footerItems && (

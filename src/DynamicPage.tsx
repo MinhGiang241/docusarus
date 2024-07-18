@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useEffect, useState } from "react";
 import Layout from "@theme/Layout";
 import {
@@ -170,14 +171,22 @@ function DynamicPage(props: any) {
         </aside>
       </div>
 
-      {footerItems && (
-        <FooterLayout
-          style="dark"
-          logo={<div />}
-          links={<FooterLinks links={footerItems?.items ?? []} />}
-          copyright={<FooterCopyright copyright={footerItems?.copyright} />}
-        />
-      )}
+      {/* {footerItems && ( */}
+      {/*   <FooterLayout */}
+      {/*     style={footerItems?.style ?? "dark"} */}
+      {/*     logo={ */}
+      {/*       footerItems?.logo ? ( */}
+      {/*         <div> */}
+      {/*           <img width={100} height={100} src={footerItems?.logo} /> */}
+      {/*         </div> */}
+      {/*       ) : ( */}
+      {/*         <div /> */}
+      {/*       ) */}
+      {/*     } */}
+      {/*     links={<FooterLinks links={footerItems?.items ?? []} />} */}
+      {/*     copyright={<FooterCopyright copyright={footerItems?.copyright} />} */}
+      {/*   /> */}
+      {/* )} */}
     </LayoutProvider>
   );
 }

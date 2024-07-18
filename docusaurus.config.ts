@@ -129,7 +129,7 @@ export default async () => {
           },
         ],
       },
-      footer: footer as any,
+      // footer: footer as any,
       prism: {
         theme: prismThemes.github,
         darkTheme: prismThemes.dracula,

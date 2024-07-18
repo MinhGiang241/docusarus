@@ -35,105 +35,121 @@ interface CustomSideBar {
   type?: string;
   href?: string;
   label?: string;
-  html?: string;
+  id?: string;
+  items?: CustomSideBar[];
+}
+
+interface CustomNavBar {
+  label?: string;
+  href?: string;
+  id?: string;
+}
+
+interface CustomRoute {
+  type?: string;
+  href?: string;
+  label?: string;
 }
 
 function DynamicPage(props: any) {
   console.log("props", props);
-
-  var footerItems = [
-    {
-      title: "Docs",
-      items: [
-        {
-          label: "Tutorial",
-          to: "/docs/intro",
-        },
-      ],
-    },
-    {
-      title: "Community",
-      items: [
-        {
-          label: "Stack Overflow",
-          href: "https://stackoverflow.com/questions/tagged/docusaurus",
-        },
-        {
-          label: "Discord",
-          href: "https://discordapp.com/invite/docusaurus",
-        },
-        {
-          label: "Twitter",
-          href: "https://twitter.com/docusaurus",
-        },
-      ],
-    },
-    {
-      title: "More",
-      items: [
-        {
-          label: "Blog",
-          to: "/blog",
-        },
-        {
-          label: "GitHub",
-          href: "https://github.com/facebook/docusaurus",
-        },
-      ],
-    },
-  ];
-
   const [sideBars, setSideBars] = useState<CustomSideBar[]>([]);
+  const [navBars, setNavBars] = useState<CustomNavBar[]>([]);
+  const [footerItems, setFooterItems] = useState<any | undefined>();
+  const [links, setLinks] = useState<CustomRoute[]>([]);
+
+  const getFooter = async () => {
+    try {
+      var response = await axios.get(
+        "https://api.tutorial.tmas.net.vn/apimodel/test.get_footer",
+      );
+      console.log("res SideBar", response);
+      setFooterItems(response?.data?.data);
+    } catch (e) {
+      setFooterItems(undefined);
+    }
+  };
+
+  const getLinkres = (sidebar: CustomSideBar[]) => {
+    let L = [];
+
+    for (let i of sidebar) {
+      if (i.type == "link") {
+        L.push(i);
+      } else if (i.type == "category" && i.items) {
+        L = [...L, ...getLinkres(i?.items)];
+      }
+    }
+    return L;
+  };
+
   const getCustomSideBar = async () => {
     try {
       var res = await axios.get(
         "https://api.tutorial.tmas.net.vn/apimodel/test.custom_sidebar",
       );
 
-      console.log("res SideBar", res);
+      setSideBars(res?.data?.data?.sideBars);
+      setNavBars(res?.data?.data?.navBars);
+      var L = [];
+      console.log(
+        "getLinkres(res?.data?.data?.sideBars)",
+        getLinkres(res?.data?.data?.sideBars),
+      );
 
-      setSideBars(res?.data?.data);
+      L = [...L, ...getLinkres(res?.data?.data?.sideBars)];
+
+      for (let j of res?.data?.data?.navBars) {
+        var index = L.findIndex((e) => e.href === j.href);
+        if (index === -1) {
+          L.push(j);
+        }
+      }
+
+      console.log("L", L);
+
+      setLinks(L);
     } catch (e) {
-      return setSideBars([]);
+      setNavBars([]);
+      setSideBars([]);
+      setLinks([]);
     }
   };
 
   useEffect(() => {
     getCustomSideBar();
+    getFooter();
   }, []);
 
   return (
     <LayoutProvider>
       <NavbarLayout>
         <NavbarLogo />
-        <DefaultNavbarItem label="docs" to={"/docs"} />
-        <DefaultNavbarItem label="Dynamic" to={"/d"} />
-        <DefaultNavbarItem label="custom-1" to={"/d/1"} />
-        <DefaultNavbarItem label="custom-2" to={"/d/2"} />
-        <DefaultNavbarItem label="custom-3" to={"/d/3"} />
+        {navBars?.map((e) => (
+          <DefaultNavbarItem label={e?.label} to={e?.href} />
+        ))}
 
         {/* <NavbarNavLink  label="Dynamic" isNavLink exact  /> */}
-
-        <NavbarItem
-          isNavLink
-          value="/d"
-          position="left"
-          title="HHH"
-          items={[
-            {
-              to: "/guides/",
-              label: "Guides",
-            },
-            {
-              to: "/api/ios",
-              label: "iOS API",
-            },
-            {
-              to: "/api/android",
-              label: "Android API",
-            },
-          ]}
-        ></NavbarItem>
+        {/* <NavbarItem */}
+        {/*   isNavLink */}
+        {/*   value="/d" */}
+        {/*   position="left" */}
+        {/*   title="HHH" */}
+        {/*   items={[ */}
+        {/*     { */}
+        {/*       to: "/guides/", */}
+        {/*       label: "Guides", */}
+        {/*     }, */}
+        {/*     { */}
+        {/*       to: "/api/ios", */}
+        {/*       label: "iOS API", */}
+        {/*     }, */}
+        {/*     { */}
+        {/*       to: "/api/android", */}
+        {/*       label: "Android API", */}
+        {/*     }, */}
+        {/*   ]} */}
+        {/* ></NavbarItem> */}
       </NavbarLayout>
       <div style={{ display: "flex", minHeight: "900px" }}>
         <aside>
@@ -143,7 +159,7 @@ function DynamicPage(props: any) {
         <aside>
           <Switch>
             <Route path={`/d`} render={() => <HomePage />} exact />
-            {sideBars?.map((g) => (
+            {links?.map((g) => (
               <Route
                 path={g.href ?? ""}
                 render={() => <Custom data={g} />}
@@ -154,12 +170,20 @@ function DynamicPage(props: any) {
         </aside>
       </div>
 
-      <FooterLayout
-        style="dark"
-        logo={<div></div>}
-        links={<FooterLinks links={footerItems} />}
-        copyright={<FooterCopyright copyright="OKKKK" />}
-      />
+      {footerItems && (
+        <FooterLayout
+          style="dark"
+          logo={
+            footerItems?.logo ? (
+              <div>
+                <img width={100} height={100} src={footerItems?.logo} />
+              </div>
+            ) : null
+          }
+          links={<FooterLinks links={footerItems?.items ?? []} />}
+          copyright={<FooterCopyright copyright={footerItems?.copyright} />}
+        />
+      )}
     </LayoutProvider>
   );
 }

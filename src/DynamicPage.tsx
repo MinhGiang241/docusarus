@@ -174,15 +174,7 @@ function DynamicPage(props: any) {
       {footerItems && (
         <FooterLayout
           style="dark"
-          logo={
-            footerItems?.logo ? (
-              <div>
-                <img width={100} height={100} src={footerItems?.logo} />
-              </div>
-            ) : (
-              <div />
-            )
-          }
+          logo={<div />}
           links={<FooterLinks links={footerItems?.items ?? []} />}
           copyright={<FooterCopyright copyright={footerItems?.copyright} />}
         />
